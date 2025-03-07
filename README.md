@@ -173,3 +173,6 @@ This C++ code implements a Binary Search Tree (BST). A BST is a data structure t
 ### Summary
 This code provides a basic implementation of a Binary Search Tree with functionalities for insertion, deletion, and inorder traversal. The recursive methods for insertion and deletion are key to maintaining the properties of the BST, ensuring that all left descendants are less than the node and all right descendants are greater.
 
+
+
+![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
