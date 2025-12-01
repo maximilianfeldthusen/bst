@@ -33,11 +33,13 @@ private:
         if (node == nullptr) {
             return new Node(key);
         }
+
         if (key < node->key) {
             node->left = insertRec(node->left, key);
-        } else {
+        } else if (key > node->key) {  // Only insert if the key is not equal to the node's key
             node->right = insertRec(node->right, key);
         }
+        // If key == node->key, we do nothing to avoid duplicates
         return node;
     }
 
@@ -102,22 +104,21 @@ int main() {
     std::cout << "Inorder traversal of the BST: ";
     bst.inorder();
 
-    std::cout << "Delete 20" << std::endl; // Fixed newline formatting
+    std::cout << "Delete 20" << std::endl;
     bst.deleteNode(20);
     std::cout << "Inorder traversal after deleting 20: ";
     bst.inorder();
 
-    std::cout << "Delete 30" << std::endl; // Fixed newline formatting
+    std::cout << "Delete 30" << std::endl;
     bst.deleteNode(30);
     std::cout << "Inorder traversal after deleting 30: ";
     bst.inorder();
 
-    std::cout << "Delete 50" << std::endl; // Fixed newline formatting
+    std::cout << "Delete 50" << std::endl;
     bst.deleteNode(50);
     std::cout << "Inorder traversal after deleting 50: ";
     bst.inorder();
 
     return 0;
 }
-
 
