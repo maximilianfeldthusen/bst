@@ -1,9 +1,13 @@
 
+
+````markdown
 # Binary Search Tree (BST) in C++
 
-This code implements a **Binary Search Tree (BST)** in C++, which supports insertion, deletion, and inorder traversal.
+This document provides a detailed explanation of a C++ implementation of a **Binary Search Tree (BST)** supporting **insertion**, **deletion**, and **inorder traversal**.
 
-## 1. **Node Structure:**
+---
+
+## 1. Node Structure
 
 ```cpp
 struct Node {
@@ -13,20 +17,20 @@ struct Node {
 
     Node(int value) : key(value), left(nullptr), right(nullptr) {}
 };
+````
 
-Node: This is the structure that represents each node in the binary search tree.
+### Explanation
 
+* **Node**: Represents each element in the BST.
+* **key**: The integer value stored in the node.
+* **left / right**: Pointers to the left and right child nodes.
+* The constructor initializes `left` and `right` to `nullptr`.
 
-key: The integer value stored in the node.
+---
 
+## 2. `BinarySearchTree` Class
 
-left and right: Pointers to the left and right child nodes of the current node.
-
-
-The constructor Node(int value) initializes the key with the given value and sets both left and right pointers to nullptr.
-
-
-2. BinarySearchTree Class:
+```cpp
 class BinarySearchTree {
 public:
     BinarySearchTree() : root(nullptr) {}
@@ -40,81 +44,67 @@ private:
     Node* minValueNode(Node* node);
     void inorderRec(Node* node);
 };
+```
 
-BinarySearchTree (BST): This class represents the binary search tree itself.
+### Explanation
 
+* **root**: Pointer to the root of the BST.
+* Constructor sets `root` to `nullptr`, representing an empty tree.
 
-root: A pointer to the root of the tree.
+### Public Methods
 
+* **insert(int key)** — Inserts a new key.
+* **deleteNode(int key)** — Deletes a node with the given key.
+* **inorder()** — Prints the keys in inorder traversal (left → root → right).
 
-The constructor initializes root to nullptr (empty tree).
+### Private Methods
 
+* **insertRec(...)** — Helper for recursive insertion.
+* **deleteRec(...)** — Helper for recursive deletion.
+* **minValueNode(...)** — Returns the node with the smallest key in a subtree.
+* **inorderRec(...)** — Helper for inorder traversal.
 
-Public methods:
+---
 
+## 3. Insertion (`insertRec`)
 
-insert(int key): Inserts a new node with the given key into the tree.
-
-
-deleteNode(int key): Deletes the node with the given key from the tree.
-
-
-inorder(): Prints the tree’s nodes in inorder (left, root, right) traversal order.
-
-
-Private methods:
-
-
-insertRec(Node* node, int key): Recursively inserts a new node into the tree.
-
-
-deleteRec(Node* root, int key): Recursively deletes a node from the tree.
-
-
-minValueNode(Node* node): Finds the node with the smallest key (used for node deletion).
-
-
-inorderRec(Node* node): Recursively prints the tree in inorder traversal.
-
-
-3. Insertion (insertRec):
+```cpp
 Node* insertRec(Node* node, int key) {
     if (node == nullptr) {
-        return new Node(key);  // Create a new node if we've found a null position.
+        return new Node(key);
     }
 
     if (key < node->key) {
-        node->left = insertRec(node->left, key);  // Recurse on the left subtree if key is smaller.
+        node->left = insertRec(node->left, key);
     } else if (key > node->key) {
-        node->right = insertRec(node->right, key);  // Recurse on the right subtree if key is larger.
+        node->right = insertRec(node->right, key);
     }
-    // If key == node->key, we do nothing to avoid duplicates.
 
     return node;
 }
+```
 
-The method insertRec recursively finds the appropriate position for the new node in the BST based on the key.
+### Behavior
 
+* Recursively finds the correct position based on BST rules.
+* Inserts the new key in the left or right subtree.
+* If the key already exists, insertion is skipped to avoid duplicates.
 
-If the key is smaller than the current node's key, it goes to the left child; if larger, it goes to the right child.
+---
 
+## 4. Deletion (`deleteRec`)
 
-If the key is equal to an existing node's key, it does nothing (to avoid duplicates).
-
-
-4. Deletion (deleteRec):
+```cpp
 Node* deleteRec(Node* root, int key) {
     if (root == nullptr) {
         return root;
     }
 
-    // Recursively search for the node to delete.
     if (key < root->key) {
         root->left = deleteRec(root->left, key);
     } else if (key > root->key) {
         root->right = deleteRec(root->right, key);
-    } else {  // Node to be deleted is found.
-        // Node with one or no children.
+    } else {
         if (root->left == nullptr) {
             Node* temp = root->right;
             delete root;
@@ -125,24 +115,29 @@ Node* deleteRec(Node* root, int key) {
             return temp;
         }
 
-        // Node with two children: Get the inorder successor (smallest in the right subtree)
         Node* temp = minValueNode(root->right);
-        root->key = temp->key;  // Replace root's key with inorder successor's key.
-        root->right = deleteRec(root->right, temp->key);  // Delete the inorder successor.
+        root->key = temp->key;
+        root->right = deleteRec(root->right, temp->key);
     }
     return root;
 }
+```
 
-This method recursively searches for the node to be deleted.
+### Deletion Cases
 
+1. **No children** → delete node.
+2. **One child** → replace node with its child.
+3. **Two children**:
 
-If the node has one or no children, it is deleted directly.
+   * Find the **inorder successor** (smallest in right subtree).
+   * Replace node’s value with successor’s key.
+   * Delete successor recursively.
 
+---
 
-If the node has two children, the node is replaced by its inorder successor (the smallest node in its right subtree), and then the inorder successor is deleted recursively.
+## 5. Finding Minimum Node
 
-
-5. Finding Minimum Node (minValueNode):
+```cpp
 Node* minValueNode(Node* node) {
     Node* current = node;
     while (current && current->left != nullptr) {
@@ -150,23 +145,35 @@ Node* minValueNode(Node* node) {
     }
     return current;
 }
+```
 
-This function finds the node with the minimum key in a given subtree by traversing left until it reaches the leftmost node.
+### Behavior
 
+* Moves left until reaching the smallest element in the subtree.
 
-6. Inorder Traversal (inorderRec):
+---
+
+## 6. Inorder Traversal
+
+```cpp
 void inorderRec(Node* node) {
     if (node != nullptr) {
-        inorderRec(node->left);  // Traverse left subtree.
-        std::cout << node->key << " ";  // Visit node.
-        inorderRec(node->right);  // Traverse right subtree.
+        inorderRec(node->left);
+        std::cout << node->key << " ";
+        inorderRec(node->right);
     }
 }
+```
 
-This method recursively performs an inorder traversal of the tree, printing each node’s key in order.
+### Behavior
 
+* Prints tree nodes in **ascending order**.
 
-7. Main Function:
+---
+
+## 7. Main Function
+
+```cpp
 int main() {
     BinarySearchTree bst;
     bst.insert(50);
@@ -197,17 +204,19 @@ int main() {
 
     return 0;
 }
+```
 
-Inserting Nodes: It inserts several values into the tree (50, 30, 20, 40, 70, 60, 80).
+### What the program does
 
+* Inserts values: **50, 30, 20, 40, 70, 60, 80**
+* Displays inorder traversal.
+* Deletes **20**, **30**, **50**, showing the updated BST after each deletion.
 
-Inorder Traversal: After insertion, it prints the tree in inorder.
+---
 
+## Output
 
-Deleting Nodes: The program deletes nodes with keys 20, 30, and 50, and prints the tree after each deletion.
-
-
-Output:
+```
 Inorder traversal of the BST: 20 30 40 50 60 70 80
 Delete 20
 Inorder traversal after deleting 20: 30 40 50 60 70 80
@@ -215,17 +224,20 @@ Delete 30
 Inorder traversal after deleting 30: 40 50 60 70 80
 Delete 50
 Inorder traversal after deleting 50: 40 60 70 80
+```
 
-Summary:
-The code defines a Binary Search Tree (BST) with functions for inserting, deleting, and traversing the tree in inorder.
+---
 
+## Summary
 
-The tree is implemented using a Node structure to store integer values and pointers to left and right children.
+* Implements a **Binary Search Tree** with insertion, deletion, and inorder traversal.
+* Uses a node structure with `key`, `left`, and `right` pointers.
+* Handles deletion for:
 
+  * Nodes with **0**, **1**, or **2** children.
+* Inorder traversal prints values in **ascending order**.
 
-Deletion is handled with special cases for nodes with no children, one child, or two children (by replacing the node with its inorder successor).
+---
 
-
-The inorder function prints the keys in ascending order.
-
-
+```
+```
