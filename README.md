@@ -1,7 +1,7 @@
 
 # Binary Search Tree (BST) in C++
 
-This code implements a **Binary Search Tree (BST)** in C++, which supports insertion, deletion, and inorder traversal. Here's a breakdown of the code:
+This code implements a **Binary Search Tree (BST)** in C++, which supports insertion, deletion, and inorder traversal.
 
 ## 1. **Node Structure:**
 
